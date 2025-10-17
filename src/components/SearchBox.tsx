@@ -1,5 +1,5 @@
 // src/components/SearchBox.tsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { searchUsers } from "../api";
 import { useGitHubStore } from "../store/store";
 import { Box, TextField, Button, Typography, Stack } from "@mui/material";
@@ -11,7 +11,10 @@ const SearchBox: React.FC<{ id: number }> = ({ id }) => {
   const { 
     setUsers1,
     setUsers2,
-    setUsers3, 
+    setUsers3,
+    users1,
+    users2,
+    users3 
   } = useGitHubStore();  
 
   const handleSearch = async () => {
@@ -34,6 +37,18 @@ const SearchBox: React.FC<{ id: number }> = ({ id }) => {
     }
   };
 
+  const showSearchInformation = useMemo(() => {
+    let canShow = !!username
+    if (id === 1){
+      canShow = canShow && users1.length >0
+    }else if (id === 2){
+      canShow = canShow && users2.length >0
+    }else {
+      canShow = canShow && users3.length >0
+    }
+    return canShow
+  } ,[username, users1, users2, users3])
+
   return (
     <Box sx={{ padding: 2 }}>
       <Stack spacing={2}>
@@ -52,6 +67,7 @@ const SearchBox: React.FC<{ id: number }> = ({ id }) => {
         >
           {loading ? "Searching..." : "Search"}
         </Button>
+        { showSearchInformation && <Typography>{`Showing users for "${username}"`}</Typography>}
 
         {error && <Typography color="error">{error}</Typography>}
       </Stack>

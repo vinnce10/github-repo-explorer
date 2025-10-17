@@ -110,7 +110,7 @@ const UserList: React.FC<UserListProps> = ({ id })  => {
             borderRadius: "8px",
             padding: "10px",
             boxSizing: "border-box",
-            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+            // boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
           }}
           onClick={() => handleUserClick(user)}
         >
