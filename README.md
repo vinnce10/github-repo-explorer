@@ -1,46 +1,172 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# GitHub Repository Explorer
 
-## Available Scripts
+This is a simple React app that allows users to search for GitHub users, view their repositories, and display repository details in a clean, responsive layout using Material-UI components. The application also uses **Zustand** for state management, with dynamic stores per user list.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **Search GitHub Users**: Allows searching GitHub users by username.
+- **Display Repositories**: View repositories of the selected GitHub user.
+- **Responsive Design**: Optimized for both desktop and mobile devices.
+- **State Management**: Uses Zustand to manage separate stores for each user list, ensuring independent data handling.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Technologies
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- **React**: Front-end framework for building the UI.
+- **TypeScript**: Typed JavaScript for better development experience.
+- **Material-UI**: A UI library for creating a responsive and modern interface.
+- **Zustand**: A small, fast, and scalable state management tool.
 
-### `npm test`
+## Getting Started
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Prerequisites
 
-### `npm run build`
+Make sure you have the following installed:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- [Node.js](https://nodejs.org/en/) (with npm)
+- [Git](https://git-scm.com/)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Installation
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Clone the repository to your local machine:
 
-### `npm run eject`
+   ```bash
+   git clone https://github.com/vinnce10/github-repo-explorer.git
+   cd github-repo-explorer
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+2. Install the dependencies:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+   ```bash
+   npm install
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+3. Start the development server:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+   ```bash
+   npm start
+   ```
 
-## Learn More
+   This will start the app in development mode. You can view it by navigating to `http://localhost:3000` in your browser.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Usage
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. **Search for GitHub users** by typing their username in the search bar.
+2. **View repositories**: After clicking a user, their repositories will be displayed in an accordion-style panel.
+3. **Toggle Repositories**: Clicking on a user’s name will either show or hide the repository details.
+4. **Responsive Layout**: The app is designed to adapt to mobile and desktop viewports.
+
+### File Structure
+
+Here’s a brief overview of the project file structure:
+
+```
+src/
+│
+├── api/                  # API calls for GitHub data
+│   └── index.ts          # Functions for fetching users and repositories
+│
+├── components/           # React components
+│   ├── RepositoryCard.tsx # Component for displaying repository info
+│   ├── ResponsiveLayout.tsx # Layout for displaying UserList components in a responsive grid
+│   ├── SearchBox.tsx     # Search bar component for entering GitHub usernames
+│   └── UserList.tsx      # Displays a list of users and their repositories
+│
+├── store/                # Zustand state management store
+│   └── store.ts          # Store that holds users and repositories state
+│
+├── App.tsx               # Main application entry point
+└── index.tsx             # ReactDOM render entry point
+```
+
+## State Management (Zustand)
+
+The application uses Zustand to manage the state of users and repositories. Each `UserList` component gets its own store instance based on the `id` prop. This allows for independent data management for each section of the app.
+
+### Example Store Setup:
+
+```ts
+export const useGitHubStore = create<GitHubStore>((set) => ({
+  users1: [],
+  users2: [],
+  users3: [],
+  repositories1: [],
+  repositories2: [],
+  repositories3: [],
+  selectedUser: null,
+  loading: false,
+  error: null,
+
+  setUsers1: (users: any) => set({ users1: users }),
+  setUsers2: (users: any) => set({ users2: users }),
+  setUsers3: (users: any) => set({ users3: users }),
+  setRepositories1: (repos: any) => set({ repositories1: repos }),
+  setRepositories2: (repos: any) => set({ repositories2: repos }),
+  setRepositories3: (repos: any) => set({ repositories3: repos }),
+  setSelectedUser: (user: string) => set({ selectedUser: user }),
+  setLoading: (loading: boolean) => set({ loading }),
+  setError: (error: string | null) => set({ error }),
+}));
+```
+
+### Dynamic Store Management:
+
+The `id` prop passed to each `UserList` component determines which state to use for each list (i.e., `users1`, `users2`, `repositories1`, `repositories2`, etc.).
+
+## API Integration
+
+The app uses GitHub's REST API to fetch user and repository data. Here are the main API functions:
+
+### `searchUsers`:
+Fetches GitHub users based on a search query.
+
+```ts
+export const searchUsers = async (username: string) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}search/users?q=${username}&per_page=5`
+    );
+    return response.data.items;
+  } catch (error) {
+    throw new Error("Error fetching users");
+  }
+};
+```
+
+### `getRepositories`:
+Fetches repositories for a specific GitHub user.
+
+```ts
+export const getRepositories = async (username: string) => {
+  try {
+    const response = await axios.get(`${BASE_URL}users/${username}/repos`);
+    return response.data;
+  } catch (error) {
+    throw new Error(`Error fetching repositories for ${username}`);
+  }
+};
+```
+
+## Customization
+
+You can easily customize this application by adjusting the following:
+
+1. **UI Components**: Modify Material-UI components to fit your desired design.
+2. **API Queries**: Adjust the GitHub API queries to change the way users and repositories are fetched.
+3. **State Management**: Modify the Zustand store to add additional functionality or states.
+
+## Contributing
+
+If you would like to contribute to this project, feel free to fork the repository and submit a pull request with your changes.
+
+1. Fork the repository
+2. Create a new branch for your feature (`git checkout -b feature-name`)
+3. Commit your changes (`git commit -am 'Add new feature'`)
+4. Push to the branch (`git push origin feature-name`)
+5. Create a new pull request
+
+---
+
+### License
+
+This project is open-source and available under the [MIT License](LICENSE).
