@@ -106,11 +106,9 @@ const UserList: React.FC<UserListProps> = ({ id })  => {
         <Box
           key={user.id}
           sx={{
-            backgroundColor: "#f4f4f4",
             borderRadius: "8px",
             padding: "10px",
             boxSizing: "border-box",
-            // boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
           }}
           onClick={() => handleUserClick(user)}
         >
@@ -123,6 +121,9 @@ const UserList: React.FC<UserListProps> = ({ id })  => {
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1a-content"
                 id="panel1a-header"
+                sx={{
+                   backgroundColor: "#f4f4f4",
+                }}
               >
                 <Typography>{user.login}</Typography>
               </AccordionSummary>

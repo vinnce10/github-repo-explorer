@@ -22,11 +22,12 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
         "@media (max-width: 600px)": {
           maxWidth: "100%",
         },
+        background: '#f4f4f4'
       }}
     >
       <CardContent>
         <Typography
-          variant="h6"
+
           component="div"
           sx={{
             fontWeight: "bold",
@@ -49,7 +50,6 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
 
         <Typography
           variant="body2"
-          color="text.secondary"
           sx={{ marginTop: 1, textAlign: "left" }}
         >
           {description || "No description available"}

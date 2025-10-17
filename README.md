@@ -3,6 +3,10 @@
 
 This is a simple React app that allows users to search for GitHub users, view their repositories, and display repository details in a clean, responsive layout using Material-UI components. The application also uses **Zustand** for state management, with dynamic stores per user list.
 
+# Link
+
+https://vinnce10.github.io/github-repo-explorer/ 
+
 ## Features
 
 - **Search GitHub Users**: Allows searching GitHub users by username.
