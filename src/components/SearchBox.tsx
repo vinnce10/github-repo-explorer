@@ -53,11 +53,14 @@ const SearchBox: React.FC<{ id: number }> = ({ id }) => {
     <Box sx={{ padding: 2 }}>
       <Stack spacing={2}>
         <TextField
-          label="GitHub Username"
+          label="Enter username"
           variant="outlined"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           fullWidth
+          sx={{
+            background: "#eae7e7ff"
+          }}
         />
         <Button
           variant="contained"
